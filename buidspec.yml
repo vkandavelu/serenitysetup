@@ -1,7 +1,7 @@
 version: 0.2
 phases:
-  install:
-    commands:
+  install:         # 2 spaces before 'install'
+    commands:      # 2 spaces before 'commands'
       - echo Installing dependencies...
       - mvn install
   build:
