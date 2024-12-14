@@ -1,0 +1,14 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo Installing dependencies...
+      - mvn install
+  build:
+    commands:
+      - echo Running tests...
+      - mvn clean verify
+artifacts:
+  files:
+    - "**/*"
+  discard-paths: no
