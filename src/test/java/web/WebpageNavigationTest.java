@@ -4,6 +4,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
 import org.junit.After;
@@ -43,7 +44,17 @@ public class WebpageNavigationTest {
         // Assert: John should see the welcome banner
         System.out.println("Element visibility: " + HomePage.WELCOME_BANNER.resolveFor(john).isVisible());
         then(john).should(seeThat(IsElementVisible.on(HomePage.WELCOME_BANNER), is(true)));
+
+        then(john).attemptsTo(Click.on(HomePage.CLICK_MOREINFOLINNK));
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
+
+
 
     @After
     public void tearDown() {
