@@ -13,9 +13,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import questions.ReadTable;
 import tasks.NavigateToHomePage;
 import questions.IsElementVisible;
 import ui.HomePage;
+
+import java.util.List;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static org.hamcrest.CoreMatchers.is;
@@ -47,11 +50,15 @@ public class WebpageNavigationTest {
 
         then(john).attemptsTo(Click.on(HomePage.CLICK_MOREINFOLINNK));
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        then(john).attemptsTo(Click.on(HomePage.NUMBERSHEADERS));
+
+        // Step 1: Read the table values
+        List<String> tableValues = john.asksFor(ReadTable.from(HomePage.TABLE_ROWS));
+
+        System.out.println("My table values --->"+tableValues);
+        // Step 2: Print the table values
+        tableValues.forEach(System.out::println);
+
     }
 
 
