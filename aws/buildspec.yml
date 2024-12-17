@@ -3,18 +3,18 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: corretto17  # Use the desired Java version
+      java: corretto17  # Ensure the desired Java version is set
     commands:
       - echo "Installing Maven dependencies..."
       - mvn clean install -DskipTests
 
   pre_build:
     commands:
-      - echo "Setting up ChromeDriver..."
+      - echo "Setting up Chrome and ChromeDriver on Amazon Linux..."
 
-      # Install Google Chrome (without sudo)
-      - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      - apt-get update && apt-get install -y ./google-chrome-stable_current_amd64.deb
+      # Install Google Chrome
+      - wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+      - yum install -y ./google-chrome-stable_current_x86_64.rpm
       - google-chrome --version  # Verify Chrome installation
 
       # Install ChromeDriver
@@ -26,12 +26,12 @@ phases:
 
   build:
     commands:
-      - echo "Running Serenity tests..."
+      - echo "Running Serenity Screenplay tests..."
       - mvn clean verify -Dwebdriver.chrome.driver=/usr/bin/chromedriver
 
   post_build:
     commands:
-      - echo "Build and tests completed successfully!"
+      - echo "Build completed successfully!"
       - echo "Archiving Serenity test reports..."
 
 artifacts:
