@@ -1,14 +1,40 @@
 version: 0.2
+
 phases:
-  install:         # 2 spaces before 'install'
-    commands:      # 2 spaces before 'commands'
+  install:
+    runtime-versions:
+      java: corretto17  # Use the Java version compatible with your project (e.g., corretto11 or corretto17)
+    commands:
       - echo Installing dependencies...
-      - mvn install
+      - mvn clean install -DskipTests  # Install dependencies without running tests
+
+  pre_build:
+    commands:
+      - echo Setting up ChromeDriver...
+      # Install Chrome and ChromeDriver
+      - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      - sudo apt-get update && sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+      - CHROME_VERSION=$(google-chrome --version)
+      - echo "Installed Chrome version: $CHROME_VERSION"
+      - wget -N https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+      - unzip chromedriver_linux64.zip
+      - sudo mv chromedriver /usr/bin/chromedriver
+      - sudo chmod +x /usr/bin/chromedriver
+      - chromedriver --version
+
   build:
     commands:
-      - echo Running tests...
-      - mvn clean verify
+      - echo Running Serenity tests...
+      - mvn clean verify -Dwebdriver.chrome.driver=/usr/bin/chromedriver
+
+  post_build:
+    commands:
+      - echo Build and tests completed successfully!
+      - echo Archiving Serenity test reports...
+
 artifacts:
   files:
-    - "**/*"
+    - target/site/serenity/**/*
+    - target/serenity-summary.html
+    - "**/*.xml"  # Include XML reports if applicable
   discard-paths: no
